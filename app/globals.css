@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Oscuro — tema por defecto */
+    --color-bg: 11 11 12;
+    --color-surface: 21 21 23;
+    --color-border: 35 35 38;
+    --color-primary: 245 245 240;
+    --color-secondary: 138 138 133;
+    --color-accent: 232 72 44;
+    --color-success: 76 175 109;
+    --color-warning: 212 167 44;
+  }
+
+  .light {
+    --color-bg: 250 250 249;
+    --color-surface: 241 241 238;
+    --color-border: 224 224 220;
+    --color-primary: 17 17 17;
+    --color-secondary: 100 100 96;
+    --color-accent: 199 58 32;
+    --color-success: 34 122 68;
+    --color-warning: 139 103 8;
+  }
+
+  body {
+    @apply bg-bg text-primary font-sans antialiased transition-colors duration-150;
+  }
+}
+
+@layer components {
+  .data-table {
+    @apply w-full text-sm;
+  }
+  .data-table th {
+    @apply text-left font-sans text-secondary font-normal text-xs py-3 px-4 border-b border-border;
+  }
+  .data-table td {
+    @apply py-3 px-4 border-b border-border;
+  }
+  .data-table tr:hover td {
+    @apply bg-surface;
+  }
+  .pill {
+    @apply inline-flex items-center px-2.5 py-1 rounded text-xs;
+  }
+}
