@@ -5,16 +5,7 @@ import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { requireStaffSession } from '@/lib/require-staff';
 import { can } from '@/lib/permissions';
-
-export const STAGES = [
-  'new',
-  'contacted',
-  'trial_scheduled',
-  'trial_completed',
-  'converted',
-] as const;
-
-export type Stage = (typeof STAGES)[number] | 'lost';
+import { STAGES, type Stage } from './constants';
 
 export async function createLead(formData: FormData) {
   const session = await requireStaffSession();

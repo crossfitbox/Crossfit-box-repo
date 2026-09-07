@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { requireStaffSession } from '@/lib/require-staff';
 import { getPermissions } from '@/lib/permissions';
-import { advanceStage, markLost, deleteLead, STAGES } from './actions';
+import { advanceStage, markLost, deleteLead } from './actions';
+import { STAGES } from './constants';
 
 const STAGE_LABELS: Record<string, string> = {
   new: 'Nuevo',
