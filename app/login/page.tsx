@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -97,6 +98,10 @@ export default function LoginPage() {
         >
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
+
+        <Link href="/forgot-password" className="block text-center text-secondary text-sm mt-4 hover:text-primary">
+          ¿Olvidaste tu contraseña?
+        </Link>
 
         <p className="text-secondary text-xs mt-4">
           Solo coaches, admins y dueños del box tienen acceso a este panel.
