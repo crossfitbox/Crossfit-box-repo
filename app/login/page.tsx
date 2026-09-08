@@ -21,30 +21,39 @@ export default function LoginPage() {
     setError(null);
 
     // Antes de intentar con contraseña, revisar si el dominio del
-    // correo tiene SSO obligatorio configurado.
+    // correo tiene SSO obligatorio configurado. Si esta verificación
+    // falla por lo que sea (tabla no existe, red, etc.), NUNCA debe
+    // bloquear el login normal — sigue de largo con contraseña.
     const domain = email.split('@')[1];
     if (domain) {
-      const res = await fetch(`/api/auth/sso-check?domain=${encodeURIComponent(domain)}`);
-      const check = await res.json();
+      try {
+        const res = await fetch(`/api/auth/sso-check?domain=${encodeURIComponent(domain)}`);
+        const check = await res.json();
 
-      if (check.sso) {
-        const { data, error: ssoError } = await supabase.auth.signInWithSSO({
-          providerId: check.providerId,
-        });
-        if (ssoError) {
-          setError('No se pudo iniciar sesión con SSO — contacta a tu administrador');
-          setLoading(false);
+        if (check.sso) {
+          const { data, error: ssoError } = await supabase.auth.signInWithSSO({
+            providerId: check.providerId,
+          });
+          if (ssoError) {
+            setError('No se pudo iniciar sesión con SSO — contacta a tu administrador');
+            setLoading(false);
+            return;
+          }
+          if (data?.url) window.location.href = data.url;
           return;
         }
-        if (data?.url) window.location.href = data.url;
-        return;
+      } catch {
+        // sso-check falló — seguimos con login normal por contraseña
       }
     }
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      setError('Correo o contraseña incorrectos');
+      // Mostramos el mensaje real de Supabase (no uno genérico) para
+      // poder diagnosticar: puede ser contraseña, email sin confirmar,
+      // o incluso variables de entorno mal configuradas.
+      setError(`${error.message} (código: ${error.status ?? 'sin código'})`);
       setLoading(false);
       return;
     }
